@@ -4,11 +4,13 @@ from Data_readers.networker_reader import Reader
 from Layer.layer import HiddenLayer
 
 class Layers:
-    def __init__(self,path,input_size,output_size):
+    def __init__(self,path,input_size,output_size,requires_grad):
         self.Layers = []
         self.reader = Reader(path)
         self.lr = self.reader.learning_rate
+        self.requires_grad = requires_grad
         self.create_layers(n_x_initial = input_size,n_y=output_size)
+        self.caches = []
 
     def create_layers(self,n_x_initial,n_y):
         network_dict = self.reader.layers_dict
@@ -22,7 +24,7 @@ class Layers:
             
             # Hidden layers
             if  idx != len(network_dict)-1:
-                layer = HiddenLayer(layer_dict,self.lr)
+                layer = HiddenLayer(layer_dict,self.lr,self.requires_grad)
                 layer.init_layer(n_x)
                 self.Layers.append(layer)
                 n_x = layer.num_of_neurons
@@ -35,7 +37,27 @@ class Layers:
                 layer.init_layer(n_x)
                 self.Layers.append(layer)
 
+    def forward(self,X):
+        out = X
+        for layer in self.Layers:
+            out,cache = layer.forward(out)
+            if self.requires_grad:
+                self.caches.append(cache)
+        return out
 
+    def backward(self,dAL):
+        dA = dAL
+
+        for idx in reversed(range(len(self.Layers))):
+            dA = self.Layers[idx].backward(dA,self.caches[idx])
+            
+    def update(self):
+        for layer in self.Layers:
+            layer.update()
+
+    def zero_grad(self):
+        for layer in self.Layers:
+            layer.zero_grad()
 
     def print_layer_shapes(self):
         print("Layer Hidden Weights Dimensions")
@@ -44,17 +66,24 @@ class Layers:
         print("****")
 
 if __name__ == "__main__":
-    layers = Layers("Configs/example_network.yaml",28**2,10)
+    layers = Layers("Configs/example_network.yaml",12288,1)
     layers.print_layer_shapes()
     
 
-    X = np.random.randn(28**2,)
+    X = np.random.randn(12288, 209)
     layer_1 = layers.Layers[0]
     layer_2 = layers.Layers[1]
+    layer_3 = layers.Layers[2]
+    layer_4 = layers.Layers[3]
 
     out_1 = layer_1.forward(X)
     out_2 = layer_2.forward(out_1)
+    out_3 = layer_3.forward(out_2)
+    out_4 = layer_4.forward(out_3)
 
+    print("Number of layers : {0}".format(len(layers.Layers)))
     print("A[0] shape : ",X.shape)
     print("A[1] shape : ",out_1.shape)
     print("A[2] shape : ",out_2.shape)
+    print("A[3] shape : ",out_3.shape)
+    print("A[4] shape : ",out_4.shape)

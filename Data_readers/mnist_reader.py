@@ -50,8 +50,17 @@ class Reader_MNIST:
         plt.show()
 
 if __name__ == "__main__":
+    # from Data_readers.mnist_reader import Reader_MNIST
+    # mnist_data = Reader_MNIST("Data/mnist/")
+    # # training set shape : (60000, 784)
+    # train_data = mnist_data.train_data 
+    # labels_train = mnist_data.labels_train
+    # # testing set shape : (10000, 784)
+    # test_data = mnist_data.test_data 
+    # labels_test = mnist_data.labels_test
+    
     "Example Usage of the reader"
-    mnist_reader = Reader_MNIST("data/mnist/")
+    mnist_reader = Reader_MNIST("Data/mnist/")
     
     mnist_reader.show_random()
     mnist_reader.show_random()

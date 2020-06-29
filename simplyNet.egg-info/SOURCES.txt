@@ -2,14 +2,15 @@ README.md
 setup.py
 Commons/__init__.py
 Commons/data_parser.py
-Commons/networker_reader.py
 Data_readers/__init__.py
 Data_readers/mnist_reader.py
+Data_readers/networker_reader.py
 Functionals/__init__.py
 Functionals/activation.py
 Functionals/hededo.py
 Layer/__init__.py
 Layer/layer.py
+Layer/layers.py
 LogisticRegression/__init__.py
 LogisticRegression/logistic_regression.py
 Networks/__init__.py

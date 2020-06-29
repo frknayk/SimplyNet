@@ -3,15 +3,25 @@
     {
         "network_type"    : "fully_connected",
         "batch_size" : "None",
-        "learning_rate" : 0.001,
+        "learning_rate" : 0.0075,
         "layers" :
         {
             "1":
             {
-                "hidden_size"     : 32,
+                "hidden_size"     : 20,
                 "activation_fnc"  : "relu",
             },
             "2":
+            {
+                "hidden_size"     : 7,
+                "activation_fnc"  : "relu",
+            },
+            "3":
+            {
+                "hidden_size"     : 5,
+                "activation_fnc"  : "relu",
+            },
+            "4":
             {
                 "hidden_size"     : "None",
                 "activation_fnc"  : "sigmoid",

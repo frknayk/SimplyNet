@@ -36,7 +36,7 @@ class Activations:
     def __sigmoid_der(self,dA,cache):
         """dZ[L] = da[L] * g'[l](Z[l]) where g'(x) = sigmoid(x)*(1-sigmoid(x)) """
         Z = cache
-        g_dot = self.sigmoid(Z)*( 1- self.sigmoid(Z) ) 
+        g_dot = self.__sigmoid(Z)*( 1- self.__sigmoid(Z) ) 
         dZ = dA * g_dot
         return dZ
 

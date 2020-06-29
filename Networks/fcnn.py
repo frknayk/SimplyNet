@@ -3,63 +3,82 @@ import numpy as np
 from Layer.layers import Layers
 
 class FullyConnectedNetwork:
-    def __init__(self,input_size,output_size,arch_path,seed=None):
+    def __init__(self,input_size,output_size,arch_path,seed=None,requires_grad=True):
+        # Network architecture
         self.arch_path = arch_path
-        self.layers = Layers(arch_path,input_size,output_size)
         
+        # If true, store caches
+        self.requires_grad = requires_grad
+        
+        # Initate layers
+        self.layers = Layers(arch_path,input_size,output_size,self.requires_grad)
+        
+        # Random seed
+        self.set_seed(seed)
+
+    
+        # NN last layer derivative w.r.t loss function
+        self.dA = None
+        
+    def forward(self,X):
+        output = self.layers.forward(X)
+        if self.requires_grad:
+            self.Y_hat = output
+        return output
+
+    def backward(self):
+        self.layers.backward(self.dA)
+
+    def update(self):
+        self.layers.update()
+
+    def zero_grad(self):
+        self.layers.zero_grad()
+    
+    def cost(self,Y,y_hat):
+        cost = -np.sum( Y*np.log(y_hat) + (1-Y)*np.log(1-y_hat) ) * ( 1/Y.shape[1] )
+
+        ### calc dA ###
+        self.dA = - (np.divide(Y, y_hat) - np.divide(1 - Y, 1 - y_hat))
+
+        return cost
+    
+    def set_seed(self,seed):
         if seed is not None:
             np.random.seed(seed)
 
-    def forward(self,X):
-        print("------------")
-        self.layers.print_layer_shapes()
-        out = X
-        print(out.shape)
-        for layer in self.layers.Layers:
-            out = layer.forward(out)
-            print(out.shape)
-        print("------------")
-        return out
-        
-    def backward(self,loss_func):
-        pass
-
-    def update(self):
-        pass
-
-    def zero_grad(self):
-        pass
-    
-    def cost(self,y,y_hat):
-        return 0
-
 if __name__ == "__main__":
-    from Data_readers.mnist_reader import Reader_MNIST
+    ########################## READ DATA ############################
+    from Data_readers.catvnoncat_reader import load_data,validate_load
+    train_x_orig, train_y, test_x_orig, test_y, classes = load_data('Data/catvnoncat')
+    # validate_load(train_x_orig,train_y,classes)
 
-    mnist_data = Reader_MNIST("Data/mnist/")
-    train_data = mnist_data.train_data # (60000, 784)
-    labels_train = mnist_data.labels_train
-    test_data = mnist_data.test_data # (10000, 784)
-    labels_test = mnist_data.labels_test
+    # Reshape the training and test examples 
+    train_x_flatten = train_x_orig.reshape(train_x_orig.shape[0], -1).T   # The "-1" makes reshape flatten the remaining dimensions
+    test_x_flatten = test_x_orig.reshape(test_x_orig.shape[0], -1).T
+    
+    # Standardize data to have feature values between 0 and 1.
+    train_x = train_x_flatten/255.
+    test_x = test_x_flatten/255.
 
-    fcnn = FullyConnectedNetwork(input_size=28**2,output_size=10,arch_path="Configs/example_network.yaml")
-
+    ########################## Neural Network Intitation ##########################
+    fcnn = FullyConnectedNetwork(input_size=12288,output_size=1,arch_path="Configs/example_network.yaml")
     fcnn.zero_grad()
 
+    ########################## TRAINING ############################
     losses = []
-
-    for idx,img in enumerate(train_data):
-        # Label of image
-        y = labels_train[idx]
-
+    num_iterations = 3000
+    for idx in range(0, num_iterations):
         # Neural network's prediction
-        y_hat = fcnn.forward(img)
+        y_hat = fcnn.forward(X=train_x)
 
-        # losses.append(fcnn.cost(y,y_hat))
-
-        # fcnn.backward(loss_func=None)
+        loss = fcnn.cost(Y=train_y,y_hat=y_hat)
+        losses.append(loss)
+        fcnn.backward()
 
         # fcnn.update()
+
+        print("training step : {0}".format(idx))
 
 
     

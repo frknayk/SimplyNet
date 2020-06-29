@@ -3,7 +3,7 @@ import numpy as np
 from Functionals.activation import Activations
 
 class HiddenLayer:
-    def __init__(self,layer_dict,learning_rate):
+    def __init__(self,layer_dict,learning_rate,requires_grad=True):
         self.num_of_neurons = layer_dict['hidden_size']
         self.layer_type = layer_dict['activation_fnc']
         self.learning_rate = learning_rate
@@ -12,21 +12,46 @@ class HiddenLayer:
         self.b = None
         self.dW = None
         self.db = None
+        self.linear_cache = None
+        self.activation_cache = None
+        self.requires_grad = requires_grad
     
     def init_layer(self,n_x,init_coeff=0.01):
         self.W = np.random.randn(self.num_of_neurons,n_x)*init_coeff
         self.b = np.zeros( (self.num_of_neurons,1) )
 
     def forward(self,A):
-        Z = np.dot(self.W,A) + self.b
+        Z = self.W.dot(A) + self.b
+        
+        A_shape = A.shape
+        W_shape = self.W.shape
+        b_shape = self.b.shape
+        Z_shape = Z.shape
+
         A = self.activation_fnc.f(Z)
-        return A
+
+        # Caching
+        cache = None
+        if self.requires_grad:
+            self.linear_cache = (A,self.W,self.b)
+            self.activation_cache = Z
+            cache = (self.linear_cache,self.activation_cache)
+        return A, cache
     
     def backward(self,dA,cache):
-        activation_cache,linear_cache = cache
+        linear_cache,activation_cache = cache
         dZ = self._backward_activation(dA,activation_cache)
         dA_prev = self._backward_linear(dZ,linear_cache)
         return dA_prev
+    
+    def update(self):
+        self._update()
+
+    def zero_grad(self):
+        if self.dW is not None:
+            self.dW = np.zeros( (self.dW.shape[0],self.dW.shape[1]) )
+        if self.db is not None:
+            self.db = np.zeros( (self.db.shape[0],self.db.shape[1]) )
 
     def _backward_activation(self,dA, activation_cache):
         dZ = self.activation_fnc.f_dot(dA,activation_cache)
@@ -40,9 +65,9 @@ class HiddenLayer:
         self.db = (1/m)*np.sum(dZ,axis=1,keepdims=True)
         self.dA_prev = np.dot(np.transpose(W),dZ)
 
-        assert (dA_prev.shape == A_prev.shape)
-        assert (dW.shape == W.shape)
-        assert (db.shape == b.shape)
+        assert (self.dA_prev.shape == A_prev.shape)
+        assert (self.dW.shape == W.shape)
+        assert (self.db.shape == b.shape)
 
         return self.dA_prev
 
