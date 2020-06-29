@@ -1,0 +1,23 @@
+{
+"network_architecture" : 
+    {
+        "network_type"    : "fully_connected",
+        "batch_size" : "None",
+        "learning_rate" : 0.001,
+        "layers" :
+        {
+            "1":
+            {
+                "hidden_size"     : 32,
+                "activation_fnc"  : "relu",
+            },
+            "2":
+            {
+                "hidden_size"     : "None",
+                "activation_fnc"  : "sigmoid",
+            }
+
+        },
+        "cost_function" : "custom"
+    }
+}
