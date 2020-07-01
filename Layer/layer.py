@@ -23,12 +23,7 @@ class HiddenLayer:
     def forward(self,A):
         Z = self.W.dot(A) + self.b
         
-        A_shape = A.shape
-        W_shape = self.W.shape
-        b_shape = self.b.shape
-        Z_shape = Z.shape
-
-        A = self.activation_fnc.f(Z)
+        A_new = self.activation_fnc.f(Z)
 
         # Caching
         cache = None
@@ -36,7 +31,7 @@ class HiddenLayer:
             self.linear_cache = (A,self.W,self.b)
             self.activation_cache = Z
             cache = (self.linear_cache,self.activation_cache)
-        return A, cache
+        return A_new, cache
     
     def backward(self,dA,cache):
         linear_cache,activation_cache = cache

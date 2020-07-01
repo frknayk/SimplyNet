@@ -16,14 +16,11 @@ class FullyConnectedNetwork:
         # Random seed
         self.set_seed(seed)
 
-    
         # NN last layer derivative w.r.t loss function
         self.dA = None
         
     def forward(self,X):
         output = self.layers.forward(X)
-        if self.requires_grad:
-            self.Y_hat = output
         return output
 
     def backward(self):
@@ -62,23 +59,24 @@ if __name__ == "__main__":
     test_x = test_x_flatten/255.
 
     ########################## Neural Network Intitation ##########################
-    fcnn = FullyConnectedNetwork(input_size=12288,output_size=1,arch_path="Configs/example_network.yaml")
-    fcnn.zero_grad()
+    fcnn = FullyConnectedNetwork(input_size=12288,output_size=1,seed=1,arch_path="Configs/example_network.yaml")
 
     ########################## TRAINING ############################
     losses = []
-    num_iterations = 3000
+    num_iterations = 2500
     for idx in range(0, num_iterations):
         # Neural network's prediction
         y_hat = fcnn.forward(X=train_x)
 
         loss = fcnn.cost(Y=train_y,y_hat=y_hat)
         losses.append(loss)
+        
         fcnn.backward()
 
-        # fcnn.update()
+        fcnn.update()
 
-        print("training step : {0}".format(idx))
+        if idx % 100 == 0:
+            print("training step : {0} -- loss : {1}".format(idx,loss))
 
 
     
