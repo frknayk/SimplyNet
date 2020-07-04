@@ -3,7 +3,7 @@ import numpy as np
 from Functionals.activation import Activations
 
 class HiddenLayer:
-    def __init__(self,layer_dict,learning_rate,requires_grad=True):
+    def __init__(self,layer_dict,learning_rate,requires_grad=True,seed=0):
         self.num_of_neurons = layer_dict['hidden_size']
         self.layer_type = layer_dict['activation_fnc']
         self.learning_rate = learning_rate
@@ -15,9 +15,11 @@ class HiddenLayer:
         self.linear_cache = None
         self.activation_cache = None
         self.requires_grad = requires_grad
+        self.seed = seed
     
     def init_layer(self,n_x,init_coeff=0.01):
-        self.W = np.random.randn(self.num_of_neurons,n_x)*init_coeff
+        np.random.seed(self.seed)
+        self.W = np.random.randn(self.num_of_neurons,n_x)/np.sqrt(n_x)
         self.b = np.zeros( (self.num_of_neurons,1) )
 
     def forward(self,A):
@@ -68,5 +70,5 @@ class HiddenLayer:
 
     def _update(self):
         """ Gradient descent """
-        self.W -= self.learning_rate*self.dW
-        self.b -= self.learning_rate*self.db
+        self.W = self.W - self.learning_rate*self.dW
+        self.b = self.b - self.learning_rate*self.db

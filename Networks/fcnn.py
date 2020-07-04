@@ -11,11 +11,8 @@ class FullyConnectedNetwork:
         self.requires_grad = requires_grad
         
         # Initate layers
-        self.layers = Layers(arch_path,input_size,output_size,self.requires_grad)
+        self.layers = Layers(arch_path,input_size,output_size,self.requires_grad,seed=seed)
         
-        # Random seed
-        self.set_seed(seed)
-
         # NN last layer derivative w.r.t loss function
         self.dA = None
         
@@ -39,24 +36,28 @@ class FullyConnectedNetwork:
         self.dA = - (np.divide(Y, y_hat) - np.divide(1 - Y, 1 - y_hat))
 
         return cost
-    
-    def set_seed(self,seed):
-        if seed is not None:
-            np.random.seed(seed)
 
 if __name__ == "__main__":
     ########################## READ DATA ############################
     from Data_readers.catvnoncat_reader import load_data,validate_load
-    train_x_orig, train_y, test_x_orig, test_y, classes = load_data('Data/catvnoncat')
-    # validate_load(train_x_orig,train_y,classes)
+    train_x_orig, train_y, test_x_orig, test_y, classes = load_data('/home/furkan/Furkan/Codes/Coursera-DL/SimplyNet/Data/catvnoncat')
+
+    # Explore your dataset 
+    m_train = train_x_orig.shape[0]
+    num_px = train_x_orig.shape[1]
+    m_test = test_x_orig.shape[0]
+
 
     # Reshape the training and test examples 
     train_x_flatten = train_x_orig.reshape(train_x_orig.shape[0], -1).T   # The "-1" makes reshape flatten the remaining dimensions
     test_x_flatten = test_x_orig.reshape(test_x_orig.shape[0], -1).T
-    
+
     # Standardize data to have feature values between 0 and 1.
     train_x = train_x_flatten/255.
     test_x = test_x_flatten/255.
+
+    print ("train_x's shape: " + str(train_x.shape))
+    print ("test_x's shape: " + str(test_x.shape))
 
     ########################## Neural Network Intitation ##########################
     fcnn = FullyConnectedNetwork(input_size=12288,output_size=1,seed=1,arch_path="Configs/example_network.yaml")
