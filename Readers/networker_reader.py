@@ -57,8 +57,3 @@ class Reader:
         self.batch_size = yaml_data['batch_size']
         self.learning_rate = yaml_data['learning_rate']
         self.layers_dict = yaml_data['layers']
-
-
-if __name__ == "__main__":
-    reader = Reader("Configs/example_network.yaml")
-    print(reader.layers_dict)

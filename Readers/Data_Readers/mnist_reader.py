@@ -41,6 +41,12 @@ class Reader_MNIST:
         self.labels_test = self.test_data_all[:,0]
         del self.test_data_all
 
+        # According to the convention of SimplyNet
+        # first dim must be shape of input
+        # second dim must be number of samples (or batch)
+        self.train_data = self.train_data.T
+        self.test_data = self.test_data.T
+
     def show_random(self):
         idx = np.random.randint(0,self.test_data.shape[0])
         label = self.labels_test[idx]

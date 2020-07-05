@@ -10,10 +10,11 @@ LogisticRegression/logistic_regression.py
 Networks/__init__.py
 Networks/fcnn.py
 Readers/__init__.py
-Readers/catvnoncat_reader.py
-Readers/data_parser.py
-Readers/mnist_reader.py
 Readers/networker_reader.py
+Readers/Data_Readers/__init__.py
+Readers/Data_Readers/catvnoncat_reader.py
+Readers/Data_Readers/data_parser.py
+Readers/Data_Readers/mnist_reader.py
 simplyNet.egg-info/PKG-INFO
 simplyNet.egg-info/SOURCES.txt
 simplyNet.egg-info/dependency_links.txt

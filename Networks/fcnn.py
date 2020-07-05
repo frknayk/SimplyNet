@@ -36,3 +36,10 @@ class FullyConnectedNetwork:
         self.dA = - (np.divide(Y, y_hat) - np.divide(1 - Y, 1 - y_hat))
 
         return cost
+
+    def save_weights(self,path):
+        self.layers.save_weights(path)
+    
+    def load_weights(self,path):
+        loaded_weights = self.layers.load_weights(path)
+        return loaded_weights

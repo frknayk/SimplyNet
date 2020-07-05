@@ -2,6 +2,7 @@ import numpy as np
 
 from Readers.networker_reader import Reader
 from Layer.layer import HiddenLayer
+import pickle
 
 class Layers:
     def __init__(self,path,input_size,output_size,requires_grad,seed):
@@ -78,6 +79,40 @@ class Layers:
     def zero_grad(self):
         for layer in self.Layers:
             layer.zero_grad()
+
+    def save_weights(self,path):
+        """Save layer weights with pickle as path+'.pickle'
+
+        Args:
+            path (string): full path to saved weights
+        """
+        file_name = path + ".pickle"
+        layer_weights = []
+        with open(file_name, 'wb') as handle:
+            for idx,layer in enumerate( self.Layers ):
+                layer_dict = {}
+                layer_name = layer.layer_type + '_' + str(idx) 
+                layer_dict[layer_name] = { 'W' : layer.W , 'b' : layer.b }
+                layer_weights.append(layer_dict)
+            
+            pickle.dump(layer_weights, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def get_weights(self,path):
+        file_name = path + ".pickle"
+        with open(file_name, 'rb') as handle:
+            b = pickle.load(handle)
+        return b
+
+    def load_weights(self,path):
+        weights_list = self.get_weights(path)
+        for idx,layer in enumerate( self.Layers ):
+            layer_name = layer.layer_type + '_' + str(idx)
+            layer_dict = weights_list[idx]
+            weigts_dict = layer_dict[layer_name]
+            W = weigts_dict['W']
+            b = weigts_dict['b']
+            layer.W = W
+            layer.b = b
 
     def print_layer_shapes(self):
         print("Layer Hidden Weights Dimensions")

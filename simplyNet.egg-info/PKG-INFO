@@ -1,7 +1,7 @@
 Metadata-Version: 1.2
 Name: simplyNet
 Version: 0.1
-Summary: very simple neural network creator
+Summary: Create neural networks just from yaml
 Home-page: UNKNOWN
 Author: furkanayik
 Author-email: furkanayik@outlook.com

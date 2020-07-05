@@ -30,5 +30,15 @@ fcnn = FullyConnectedNetwork(input_size,output_size,seed=1,arch_path="path_to_ar
 Run and check the example : python3 Examples/BinaryClassification_Example.py
 ```
 
+```
+Good-2-Know : According to the convention of SimplyNet, always use (input_size x num_of_samples) 
+            when constructing the SimplyNet object
+```
+
+## TODO
+- Add saving weights option to yaml config
+- Make connection between tensorboard
+- Make another class for saving/loading weights
+
 ## Contributing
 - Please send me an email for any idea or feedback about the project to furkanayik@outlook.com

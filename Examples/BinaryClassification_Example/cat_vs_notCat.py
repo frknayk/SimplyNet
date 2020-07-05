@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from Networks.fcnn import FullyConnectedNetwork
 
 # Import dataset readers
-from Readers.catvnoncat_reader import load_data,validate_load
+from Readers.Data_Readers.catvnoncat_reader import load_data,validate_load
 train_x_orig, train_y, test_x_orig, test_y, classes = load_data('/home/furkan/Furkan/Codes/Coursera-DL/SimplyNet/Data/catvnoncat')
 
 
@@ -16,7 +16,7 @@ test_x = test_x_flatten/255.
 
 
 # Initate neural network
-fcnn = FullyConnectedNetwork(input_size=12288,output_size=1,seed=1,arch_path="Examples/BİnaryClassification_Example/example_network.yaml")
+fcnn = FullyConnectedNetwork(input_size=12288,output_size=1,seed=1,arch_path="Examples/BinaryClassification_Example/example_network.yaml")
 
 # TRAINING
 losses = []
@@ -31,6 +31,7 @@ for idx in range(0, num_iterations):
     fcnn.update()
     if idx % 100 == 0:
         print("training step : {0} -- loss : {1}".format(idx,loss))
+        fcnn.save_weights('Examples/cat_vs_notCat')
 
 # plot the cost
 plt.plot(losses)
