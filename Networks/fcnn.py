@@ -41,5 +41,4 @@ class FullyConnectedNetwork:
         self.layers.save_weights(path)
     
     def load_weights(self,path):
-        loaded_weights = self.layers.load_weights(path)
-        return loaded_weights
+        self.layers.load_weights(path)
