@@ -1,46 +1,34 @@
-# Project Title
+# SimplyNet
 
 ## Table of Contents
 
 - [About](#about)
-- [Getting Started](#getting_started)
 - [Usage](#usage)
 - [Contributing](../CONTRIBUTING.md)
 
 ## About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+- Numpy based flexible open-source neural-network library. 
+- SimplyNet's backpropagation module is driven by coursera deep learning specialization course.
 
-## Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+## Prerequisites
 
-### Prerequisites
+Numpy - 1.18.4
 
-What things you need to install the software and how to install them.
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
 
 ## Usage <a name = "usage"></a>
 
-Add notes about how to use the system.
+- Create neural network architecture on yaml file, then give its path to module.
+- SimplyNet will automatically understand the architecture and create graph.
+
+```
+fcnn = FullyConnectedNetwork(input_size,output_size,seed=1,arch_path="path_to_architecture_yaml")
+```
+
+```
+Run and check the example : python3 Examples/BinaryClassification_Example.py
+```
+
+## Contributing
+- Please send me an email for any idea or feedback about the project to furkanayik@outlook.com

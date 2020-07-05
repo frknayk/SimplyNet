@@ -1,6 +1,6 @@
 import numpy as np
 
-from Data_readers.networker_reader import Reader
+from Readers.networker_reader import Reader
 from Layer.layer import HiddenLayer
 
 class Layers:
@@ -75,7 +75,6 @@ class Layers:
         # At the end of every episode clear caches
         self.caches = []
 
-
     def zero_grad(self):
         for layer in self.Layers:
             layer.zero_grad()
@@ -85,26 +84,3 @@ class Layers:
         for layer in self.Layers:
             print(layer.W.shape)
         print("****")
-
-if __name__ == "__main__":
-    layers = Layers("Configs/example_network.yaml",12288,1)
-    layers.print_layer_shapes()
-    
-
-    X = np.random.randn(12288, 209)
-    layer_1 = layers.Layers[0]
-    layer_2 = layers.Layers[1]
-    layer_3 = layers.Layers[2]
-    layer_4 = layers.Layers[3]
-
-    out_1 = layer_1.forward(X)
-    out_2 = layer_2.forward(out_1)
-    out_3 = layer_3.forward(out_2)
-    out_4 = layer_4.forward(out_3)
-
-    print("Number of layers : {0}".format(len(layers.Layers)))
-    print("A[0] shape : ",X.shape)
-    print("A[1] shape : ",out_1.shape)
-    print("A[2] shape : ",out_2.shape)
-    print("A[3] shape : ",out_3.shape)
-    print("A[4] shape : ",out_4.shape)
