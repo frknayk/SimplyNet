@@ -70,6 +70,11 @@ if __name__ == "__main__":
         y_hat = fcnn.forward(X=train_x)
 
         loss = fcnn.cost(Y=train_y,y_hat=y_hat)
+
+        is_y_hat_none = np.isnan(y_hat) 
+        if is_y_hat_none[0][0] is np.True_ : 
+            debug = True
+
         losses.append(loss)
         
         fcnn.backward()

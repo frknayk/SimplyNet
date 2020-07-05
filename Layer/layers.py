@@ -72,6 +72,10 @@ class Layers:
         for layer in self.Layers:
             layer.update()
 
+        # At the end of every episode clear caches
+        self.caches = []
+
+
     def zero_grad(self):
         for layer in self.Layers:
             layer.zero_grad()
