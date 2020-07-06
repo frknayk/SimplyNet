@@ -1,5 +1,0 @@
-Functionals
-Layer
-LogisticRegression
-Networks
-Readers
