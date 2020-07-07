@@ -30,10 +30,10 @@ class FullyConnectedNetwork:
         self.layers.zero_grad()
     
     def cost(self,Y,y_hat):
-        cost = -np.sum( Y*np.log(y_hat) + (1-Y)*np.log(1-y_hat) ) * ( 1/Y.shape[1] )
+        cost = -np.sum( Y*np.log(y_hat+1e-9) + (1-Y)*np.log(1-y_hat+1e-9) ) * ( 1/Y.shape[1] )
 
         ### calc dA ###
-        self.dA = - (np.divide(Y, y_hat) - np.divide(1 - Y, 1 - y_hat))
+        self.dA = - (np.divide(Y, y_hat+1e-9) - np.divide(1 - Y, 1 - y_hat + 1e-9))
 
         return cost
 

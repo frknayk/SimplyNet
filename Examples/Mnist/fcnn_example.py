@@ -9,7 +9,6 @@ mnist_reader = Reader_MNIST("/home/furkan/Furkan/Codes/Coursera-DL/SimplyNet/Dat
 # Initate neural network
 fcnn = FullyConnectedNetwork(input_size=28**2,output_size=10,seed=1,arch_path="Examples/Mnist/example_network.yaml")
 
-
 # TRAINING
 losses = []
 num_iterations = 2500
@@ -21,8 +20,11 @@ for idx in range(0, num_iterations):
     
     fcnn.backward()
     fcnn.update()
-    if idx % 100 == 0:
-        print("training step : {0} -- loss : {1}".format(idx,loss))
+
+    print("training step : {0} -- loss : {1}".format(idx,loss))
+
+    if loss == min(losses):
+        fcnn.save_weights('Examples/Mnist/fcnn_weight')
 
 # plot the cost
 plt.plot(losses)

@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 class Reader_MNIST:
     def __init__(self,path):
@@ -19,18 +20,27 @@ class Reader_MNIST:
         print("Loading mnist dataset, it may take a few minutes ...")
         self.read()
         self.parse()
+        self.label_one_hot_encode()
         print("Mnist dataset is loaded succesfully !")
 
     def read(self):
         """Read and parse mnist dataset as train/test 
         (dataset downloaded from : https://www.python-course.eu/neural_network_mnist.php)
         """
+        train_path = self.path + "mnist_train.csv"
+        test_path = self.path + "mnist_test.csv"
         # Read training set        
-        self.train_data_all = np.loadtxt(self.path + "mnist_train.csv", 
-                            delimiter=",")
+        self.train_data_all = pd.read_csv(train_path) 
+        self.train_data_all = pd.DataFrame(self.train_data_all).to_numpy()
+        
         # Read test set
-        self.test_data_all = np.loadtxt(self.path + "mnist_test.csv", 
-                               delimiter=",") 
+        self.test_data_all = pd.read_csv(test_path) 
+        self.test_data_all = pd.DataFrame(self.test_data_all).to_numpy()
+        # self.train_data_all = np.loadtxt(self.path + "mnist_train.csv", 
+        #                     delimiter=",")
+
+        # self.test_data_all = np.loadtxt(self.path + "mnist_test.csv", 
+        #                        delimiter=",") 
         
     def parse(self):
         self.train_data = self.train_data_all[:,1:]
@@ -47,30 +57,43 @@ class Reader_MNIST:
         self.train_data = self.train_data.T
         self.test_data = self.test_data.T
 
+    def label_one_hot_encode(self):
+        self.label_one_hot_encode_train()
+        self.label_one_hot_encode_test()
+
+    def label_one_hot_encode_train(self):
+        labels_train_new = np.zeros((self.num_of_labels,self.labels_train.shape[0]))
+        for x in range( self.labels_train.shape[0] ) :
+            labels_train_new[:,x] = one_hot( int(self.labels_train[x]) ,10)
+        self.labels_train = labels_train_new
+
+    def label_one_hot_encode_test(self):
+        labels_test_new = np.zeros((self.num_of_labels,self.labels_test.shape[0]))
+        for x in range( self.labels_test.shape[0] ) :
+            labels_test_new[:,x] = one_hot( int(self.labels_test[x]) ,10)
+        self.labels_test = labels_test_new
+
     def show_random(self):
         idx = np.random.randint(0,self.test_data.shape[0])
-        label = self.labels_test[idx]
-        img = self.test_data[idx].reshape((28,28))
+        label_encoded = np.where(self.labels_test[:,idx] == 1)
+        label = int(label_encoded[0])
+        img = self.test_data[:,idx].reshape((28,28))
         plt.imshow(img, cmap="Greys")
         plt.title(label="label : {0}".format(str(int(label))) )
         plt.show()
+    
+def one_hot(number, num_classes):
+    encoded = np.zeros((1,num_classes))
+    encoded[0][number] = 1
+    return encoded
 
 if __name__ == "__main__":
-    # from Data_readers.mnist_reader import Reader_MNIST
-    # mnist_data = Reader_MNIST("Data/mnist/")
-    # # training set shape : (60000, 784)
-    # train_data = mnist_data.train_data 
-    # labels_train = mnist_data.labels_train
-    # # testing set shape : (10000, 784)
-    # test_data = mnist_data.test_data 
-    # labels_test = mnist_data.labels_test
-    
-    "Example Usage of the reader"
+    # "Example Usage of the reader"
     mnist_reader = Reader_MNIST("Data/mnist/")
     
     mnist_reader.show_random()
-    mnist_reader.show_random()
-    mnist_reader.show_random()
-    mnist_reader.show_random()
-    mnist_reader.show_random()
+    # mnist_reader.show_random()
+    # mnist_reader.show_random()
+    # mnist_reader.show_random()
+    # mnist_reader.show_random()
     
