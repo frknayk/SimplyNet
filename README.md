@@ -36,9 +36,9 @@ Good-2-Know : According to the convention of SimplyNet, always use (input_size x
 ```
 
 ## TODO
+- Add cupy or any cuda supported GPU accelaration library for numpy 
 - Add saving weights option to yaml config
 - Make connection between tensorboard
-- Make another class for saving/loading weights
 - Re-implement logistic regression with SimplyNet modules
 
 ## Contributing
