@@ -6,5 +6,4 @@ setup(name='simplyNet',
       author='furkanayik',
       author_email='furkanayik@outlook.com',
       packages=setuptools.find_packages(),
-      location = '/home/furkan/.local/lib/python3.6/site-packages',
       python_requires='>=3.6')
