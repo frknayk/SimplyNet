@@ -31,8 +31,7 @@ Run and check the example : python3 Examples/BinaryClassification_Example.py
 ```
 
 ```
-Good-2-Know : According to the convention of SimplyNet, always use (input_size x num_of_samples) 
-            when constructing the SimplyNet object
+Good-2-Know : According to the convention of SimplyNet, always use (input_size x num_of_samples) shape
 ```
 
 ## TODO
