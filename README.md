@@ -1,11 +1,5 @@
 # SimplyNet
 
-## Table of Contents
-
-- [About](#about)
-- [Usage](#usage)
-- [Contributing](../CONTRIBUTING.md)
-
 ## About <a name = "about"></a>
 
 - Numpy based flexible open-source neural-network library. 
